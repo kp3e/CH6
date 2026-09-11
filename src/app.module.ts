@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { envSchema } from './config/env.schema';
+import { HealthModule } from './health/health.module';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { envSchema } from './config/env.schema';
       // enforces, reused here instead of a second hand-rolled check.
       validate: (raw) => envSchema.parse(raw),
     }),
+    HealthModule,
   ],
 })
 export class AppModule {}
