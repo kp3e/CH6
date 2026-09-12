@@ -17,5 +17,6 @@ async function bootstrap() {
   // memory before validation ever runs, which is a cheap way to OOM a server.
   app.use(json({ limit: '100kb' }));
   await app.listen(parsed.data.PORT);
+  let test: number = "number";
 }
 bootstrap();
