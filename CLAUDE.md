@@ -68,7 +68,8 @@ should be able to reread the file in a week and reconstruct the reasoning.
 | Tests | Vitest, plus supertest for e2e |
 | Container | Docker, multi-stage build |
 | CI/CD | GitHub Actions |
-| Cloud | AWS |
+| Hosting | Railway / Render / Fly (managed Postgres from same provider) |
+| Object storage | MinIO locally (S3-compatible API) |
 | Client | SwiftUI iOS app (separate repo) |
 
 Stack churn is the most expensive mistake available in a 14-day budget. If something
