@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+# WHY: cancel superseded runs on the same branch and event. Without the
+# event_name in the key, a push run and a pull_request run on the same branch
+# land in one group and cancel each other — which is what left your PR with
+# two "expected" checks that never arrived.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}-${{ github.event_name }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+
+      # WHY: `ci` not `install`. It installs exactly what the lockfile says and
+      # fails if package.json and the lockfile disagree, so CI can never quietly
+      # resolve a different dependency tree than your laptop did.
+      - run: npm ci
+
+      - run: npm run lint
+
+      - run: npm run typecheck
+
+      - run: npm run build
