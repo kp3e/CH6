@@ -1,8 +1,9 @@
 name: CI
 
+# WHY: least privilege. The job only checks out code. id-token: write would let
+# any step (including a compromised third-party action) mint cloud credentials.
 permissions:
   contents: read
-  id-token: write
 
 on:
   pull_request:
