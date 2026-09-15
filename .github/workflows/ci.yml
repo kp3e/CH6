@@ -33,6 +33,10 @@ jobs:
       # resolve a different dependency tree than your laptop did.
       - run: npm ci
 
+      # WHY: the Prisma client is gitignored, so it must be generated before
+      # anything imports it. Without this, typecheck fails on a missing module.
+      - run: npx prisma generate
+
       - run: npm run lint
 
       - run: npm run typecheck
