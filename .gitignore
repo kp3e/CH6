@@ -3,6 +3,8 @@ node_modules/
 
 # Build output
 dist/
+# Prisma client is generated from prisma/schema.prisma — the schema is the source of truth
+src/generated/
 coverage/
 *.tsbuildinfo
 

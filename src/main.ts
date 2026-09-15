@@ -11,6 +11,9 @@ async function bootstrap() {
     process.exit(1);
   }
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  // WHY: without this, Nest ignores SIGTERM and onModuleDestroy never runs, so
+  // the Prisma pool is never closed when the platform stops the old container.
+  app.enableShutdownHooks();
   // WHY: Express already defaults to 100kb; setting it explicitly makes the limit
   // a reviewable decision, so raising it shows up in a diff. JSON bodies here are
   // small metadata — receipt images will use a separate upload path, not this parser.

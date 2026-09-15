@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { envSchema } from './config/env.schema';
 import { HealthModule } from './health/health.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { HealthModule } from './health/health.module';
       // enforces, reused here instead of a second hand-rolled check.
       validate: (raw) => envSchema.parse(raw),
     }),
+    PrismaModule,
     HealthModule,
   ],
 })
