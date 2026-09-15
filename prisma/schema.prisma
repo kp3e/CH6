@@ -1,0 +1,28 @@
+generator client {
+  provider     = "prisma-client"
+  // WHY: generated inside src/ so `nest build` compiles it with the app, and as
+  // CommonJS because the app is CommonJS (see PROGRESS.md Day 1 decision).
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// WHY: tables and columns are snake_case in Postgres, camelCase in TypeScript.
+// Unquoted identifiers in Postgres are case-folded, so camelCase names force
+// "quoting" in every hand-written SQL query and every psql session.
+model User {
+  // WHY: UUIDv7 is time-ordered, so new rows land at the end of the primary key
+  // index instead of at random positions (v4). Also not guessable like 1, 2, 3.
+  id           String   @id @default(uuid(7)) @db.Uuid
+  // WHY: citext compares case-insensitively, so the unique constraint treats
+  // Alice@x.com and alice@x.com as the same address at the database level.
+  email        String   @unique @db.Citext
+  passwordHash String   @map("password_hash")
+  displayName  String   @map("display_name")
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(3)
+
+  @@map("users")
+}
